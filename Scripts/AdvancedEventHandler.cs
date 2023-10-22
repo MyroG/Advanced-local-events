@@ -5,98 +5,72 @@ using UnityEngine;
 using VRC.SDK3.Data;
 using VRC.SDKBase;
 using VRC.Udon;
+using VRC.Udon.Common.Enums;
 
 namespace myro
 {
+	[RequireComponent(typeof(AdvancedEventUpdateSeconds))]
+	[RequireComponent(typeof(AdvancedEventLateUpdateSeconds))]
+	[RequireComponent(typeof(AdvancedEventUpdateFrames))]
+	[RequireComponent(typeof(AdvancedEventLateUpdateFrames))]
+	[UdonBehaviourSyncMode(BehaviourSyncMode.None)]
 	public class AdvancedEventHandler : UdonSharpBehaviour
 	{
-		private DataDictionary _events;
-		private DataDictionary _IdToEvent;
-		private DataList _sortedTime;
-		private int _lastID;
-		private float _elapsedTime;
+		private AdvancedEventLateUpdateSeconds _advancedEventLateUpdateSeconds;
+		private AdvancedEventUpdateSeconds _advancedEventUpdateSeconds;
+		private AdvancedEventLateUpdateFrames _advancedEventLateUpdateFrames;
+		private AdvancedEventUpdateFrames _advancedEventUpdateFrames;
 
-		public int AdvancedSendCustomEventDelayedSeconds(UdonSharpBehaviour behaviour, string eventName, float delaySeconds)
+#region Delay seconds
+		public int AdvancedSendCustomEventDelayedSeconds(UdonSharpBehaviour behaviour, string eventName, float delaySeconds, EventTiming eventTiming = EventTiming.Update)
 		{
-			enabled = true;
-			if (_events == null)
-			{
-				_events = new DataDictionary();
-				_IdToEvent = new DataDictionary();
-			}
-
-			_lastID++;
-			float timeMS = _elapsedTime + delaySeconds;
-
-			while (_events.ContainsKey(timeMS))
-			{
-				//Two events get executed at the same time, which would cause issues with the DataDictionary indexing, sine each index need to be unique, so we will just slightly delay the event
-				timeMS += 0.001f;
-			}
-			 
-			DataList packedData = new DataList();
-			packedData.Add(behaviour);
-			packedData.Add(eventName);
-			packedData.Add(_lastID);
-
-			_events[timeMS] = packedData;
-			_IdToEvent[_lastID] = timeMS;
-			_sortedTime = _events.GetKeys();
-			_sortedTime.Sort();
-
-#if DEBUG_ADVANDED_EVENTS
-			Debug.Log($"Preparing to send {eventName} in {delaySeconds}s ({timeMS}), number of events {_events.Count}");
-#endif
-			return _lastID;
+			if (eventTiming == EventTiming.Update)
+				return _advancedEventUpdateSeconds.AdvancedSendCustomEventDelayed(behaviour, eventName, delaySeconds);
+			else
+				return _advancedEventLateUpdateSeconds.AdvancedSendCustomEventDelayed(behaviour, eventName, delaySeconds);
 		}
 
-		public void RemoveCustomEvent(int id)
+		public void RemoveCustomEventDelayedSeconds(int id, EventTiming eventTiming = EventTiming.Update)
 		{
-			if (_IdToEvent == null || !_IdToEvent.ContainsKey(id))
-			{
-#if DEBUG_ADVANDED_EVENTS
-				Debug.Log($"Failed to remove event {id}");
-#endif
-				return;
-			}
-
-#if DEBUG_ADVANDED_EVENTS
-			Debug.Log($"Removing event {id}");
-#endif
-
-			_sortedTime.Remove(_IdToEvent[id]);
-			_events.Remove(_IdToEvent[id]);
-			_IdToEvent.Remove(id);
+			if (eventTiming == EventTiming.Update)
+				_advancedEventUpdateSeconds.RemoveCustomEvent(id);
+			else
+				_advancedEventLateUpdateSeconds.RemoveCustomEvent(id);
 		}
 
-		private void Update()
+		public void DelayCustomEventDelayedSeconds(int id, float delaySeconds, EventTiming eventTiming = EventTiming.Update)
 		{
-			if (_events != null && _events.Count != 0)
-			{
-				while (_events.Count != 0)
-				{
-					float frontTime = _sortedTime[0].Float;
 
-					if (frontTime > _elapsedTime)
-					{
-						break;
-					}
-					DataList packedData = _events[frontTime].DataList;
-					UdonSharpBehaviour behaviour = (UdonSharpBehaviour)packedData[0].Reference;
-
-					if (Utilities.IsValid(behaviour))
-					{
-						behaviour.SendCustomEvent(packedData[1].String);
-					}
-					RemoveCustomEvent(packedData[2].Int);
-				}
-				if (_events.Count == 0)
-				{
-					enabled = false;
-				}
-			}
-
-			_elapsedTime += Time.deltaTime;
 		}
+		#endregion
+
+		#region Delay frames
+		public int AdvancedSendCustomEventDelayedFrames(UdonSharpBehaviour behaviour, string eventName, int delayFrames, EventTiming eventTiming = EventTiming.Update)
+		{
+			if (eventTiming == EventTiming.Update)
+				return _advancedEventUpdateFrames.AdvancedSendCustomEventDelayed(behaviour, eventName, delayFrames);
+			else
+				return _advancedEventLateUpdateFrames.AdvancedSendCustomEventDelayed(behaviour, eventName, delayFrames);
+		}
+
+		public void RemoveCustomEventDelayedFrames(int id, EventTiming eventTiming = EventTiming.Update)
+		{
+			if (eventTiming == EventTiming.Update)
+				_advancedEventUpdateFrames.RemoveCustomEvent(id);
+			else
+				_advancedEventLateUpdateFrames.RemoveCustomEvent(id);
+		}
+
+		public void DelayCustomEventDelayedFrames(int id, int delayFrames, EventTiming eventTiming = EventTiming.Update)
+		{
+
+		}
+		#endregion
+
+		protected int AdvancedSendCustomEventDelayedSeconds(string eventName, float delaySeconds, EventTiming eventTiming = EventTiming.Update)
+		{
+			return AdvancedSendCustomEventDelayedSeconds(this, eventName, delaySeconds, eventTiming);
+		} 
 	}
 }
+ 
