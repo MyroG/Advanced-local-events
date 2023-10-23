@@ -22,11 +22,11 @@ You can use this prefab if :
 - You need to pause events from time to time, or delete events.
 
 Do not use this prefab if:
-- You don't need to delay events.
-- You only have a few GameObjects, this prefab has a little performance overhead, which is not worth it if you only have a few GameObjects in your world that need to send delayed events.
+- You don't need to delay events
+- You cannot find a workaround without writing your own custom event sender.
 
 Basically, this prefab implements new methods `AdvancedSendCustomEventDelayedSeconds` and  `AdvancedSendCustomEventDelayedFrames`, which returns an ID, that ID can later be used to break the event, or pause it.
-During my tests, the preformance inpact is not too bad, but it really depends hows you're using it
+During my tests, the preformance inpact is not too bad, but it really depends on how you want to use it.
 
 ## Installation
 
