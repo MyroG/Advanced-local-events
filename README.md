@@ -26,7 +26,8 @@ Do not use this prefab if:
 - You cannot find a workaround without writing your own custom event sender.
 
 Basically, this prefab implements new methods `AdvancedSendCustomEventDelayedSeconds` and  `AdvancedSendCustomEventDelayedFrames`, which returns an ID, that ID can later be used to break the event, or pause it.
-During my tests, the preformance inpact is not too bad, but it really depends on how you want to use it.
+During my tests, I was able to queue 200 events without noticing a huige performance impact, so the preformance inpact is not too bad, but it really depends on how you want to use it. 
+The script automatically disables itself if no event is getting send, which also disables the Update events.
 
 ## Installation
 
@@ -71,4 +72,5 @@ Some important things to note
 Each ID is unique to the type of event that got created (Update, Late update, Delayed by frames, or delayed by seconds), which means that there are  a few limitations, events created by one type cannot be modified or deleted by methods used to modify or delete different kind of events :
 - Events created with `AdvancedSendCustomEventDelayedSeconds` cannot be deleted with `RemoveCustomEventDelayedFrames` , 
 - Events created with `AdvancedSendCustomEventDelayedFrames` cannot be delayed with `DelayCustomEventSeconds`
+- This also applies to the event timing (Update vs. Late Update)
 - etc.
