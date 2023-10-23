@@ -18,7 +18,7 @@ namespace myro
 
 		private void OnDisable()
 		{
-			ChechReferences();
+			CheckReferences();
 
 			_advancedEventLateUpdateSeconds.enabled = false;
 			_advancedEventUpdateSeconds.enabled = false;
@@ -28,7 +28,7 @@ namespace myro
 
 		private void OnEnable()
 		{
-			ChechReferences();
+			CheckReferences();
 
 			_advancedEventLateUpdateSeconds.enabled = true;
 			_advancedEventUpdateSeconds.enabled = true;
@@ -36,7 +36,7 @@ namespace myro
 			_advancedEventUpdateFrames.enabled = true;
 		}
 
-		private void ChechReferences()
+		private void CheckReferences()
 		{
 			if (_advancedEventLateUpdateSeconds == null)
 			{
@@ -58,7 +58,7 @@ namespace myro
 		/// <returns>ID of the event that got created, use it to access the event later if needed</returns>
 		public int AdvancedSendCustomEventDelayedSeconds(UdonSharpBehaviour behaviour, string eventName, float delaySeconds, EventTiming eventTiming = EventTiming.Update)
 		{
-			ChechReferences();
+			CheckReferences();
 
 			if (eventTiming == EventTiming.Update)
 				return _advancedEventUpdateSeconds.AdvancedSendCustomEventDelayed(behaviour, eventName, delaySeconds, false);
@@ -73,7 +73,7 @@ namespace myro
 		/// <param name="eventTiming">Event timing used by the event</param>
 		public void RemoveCustomEventDelayedSeconds(int id, EventTiming eventTiming = EventTiming.Update)
 		{
-			ChechReferences();
+			CheckReferences();
 
 			if (eventTiming == EventTiming.Update)
 				_advancedEventUpdateSeconds.RemoveCustomEvent(id);
@@ -89,7 +89,7 @@ namespace myro
 		/// <param name="eventTiming">Event timing used by the event</param>
 		public void DelayCustomEventSeconds(int id, float delaySeconds, EventTiming eventTiming = EventTiming.Update)
 		{
-			ChechReferences();
+			CheckReferences();
 			if (eventTiming == EventTiming.Update)
 				_advancedEventUpdateSeconds.DelayEvent(id, delaySeconds);
 			else
@@ -109,7 +109,7 @@ namespace myro
 		/// <returns>ID of the event that got created, use it to access the event later if needed</returns>
 		public int AdvancedSendCustomEventDelayedFrames(UdonSharpBehaviour behaviour, string eventName, int delayFrames, EventTiming eventTiming = EventTiming.Update)
 		{
-			ChechReferences();
+			CheckReferences();
 
 			if (eventTiming == EventTiming.Update)
 				return _advancedEventUpdateFrames.AdvancedSendCustomEventDelayed(behaviour, eventName, delayFrames, true);
@@ -124,7 +124,7 @@ namespace myro
 		/// <param name="eventTiming">Event timing used by the event</param>
 		public void RemoveCustomEventDelayedFrames(int id, EventTiming eventTiming = EventTiming.Update)
 		{
-			ChechReferences();
+			CheckReferences();
 
 			if (eventTiming == EventTiming.Update)
 				_advancedEventUpdateFrames.RemoveCustomEvent(id);
@@ -140,7 +140,7 @@ namespace myro
 		/// <param name="eventTiming">Event timing used by the event</param>
 		public void DelayCustomEventFrames(int id, int delayFrames, EventTiming eventTiming = EventTiming.Update)
 		{
-			ChechReferences();
+			CheckReferences();
 			if (eventTiming == EventTiming.Update)
 				_advancedEventUpdateFrames.DelayEvent(id, delayFrames);
 			else
