@@ -25,25 +25,41 @@ Do not use this prefab if:
 - You don't need to delay events
 - You only have a few GameObjects, this prefab has a little performance overhead, which is not worth it if you only have a few GameObjects in your world that need to send delayed events
 
-# Installation
+## Installation
 
 > **Note**
 An example scene is included, feel free to check it out
 
-This prefab uses UdonSharp, so you need U#, preferably the latest version that supports DataDictionaries. Then import the .unitypackage file
-
+This prefab uses UdonSharp, so you need U#, preferably the latest version that supports DataDictionaries. Then import the .unitypackage file, or just import the source code.
 Once that's done, you have a few choices :
 
-## Use the AdvancedEventHandler prefab
-- Drag and drop the prefab into your scene
-- In your script that needs to send a delayed event, add this line of code, then reference it in the Unity inspector
+### Use the AdvancedEventHandler prefab
+- Drag and drop the `AdvancedEventHandler` prefab into your scene
+- In your script that needs to send a delayed event, add this line of code, then reference it in the Unity inspector:
 ```
 public AdvancedEventHandler AdvancedEventHandlerInstance; //you can name it however you want
 ```
 - Then you can call custom events like this : `AdvancedEventHandlerInstance.AdvancedSendCustomEventDelayedSeconds(this, nameof(YourEventName), DelayInSeconds);`
-- If possible, do not add so many prefabs in your world, since any of those prefabs have an update loop.
+- This is the solution I would recommend if you have hundreds of GOs that sends a lot of events. If possible, keep the number of `AdvancedEventHandler` prefabs as low as possible.
 
-## Inheritance
+### Inheritance
 - You can also create a script that inherits from `AdvancedEventHandler` : `public class YourClass : AdvancedEventHandler`
 - Then, inside your script, you can call custom events like this : `AdvancedSendCustomEventDelayedSeconds(nameof(YourEventName), DelayInSeconds);`
-- This would be the recommended solution if you only have a few GOs that need this that occasionally sends an event
+- This would be the recommended solution if you only have a few GOs that need to occasionally sends an event
+
+## Documentation
+
+If events need to be delayed, just disable the `AdvancedEventHandler` script, either by disabling the GameObject or disabling the `AdvancedEventHandler` component
+
+| Function Name                              | Parameters                                                                      | Return Type and Explanation | Description/Summary                                           |
+|-------------------------------------------|---------------------------------------------------------------------------------|-----------------------------|---------------------------------------------------------------|
+| `AdvancedSendCustomEventDelayedSeconds`    | `behaviour` (UdonSharpBehaviour), `eventName` (string), `delaySeconds` (float), `eventTiming` (EventTiming = EventTiming.Update) | `int` (Event ID) | Executes an event with a delay in seconds and returns the ID of the event created for later access. |
+| `RemoveCustomEventDelayedSeconds`         | `id` (int), `eventTiming` (EventTiming = EventTiming.Update) | `void` | Removes an event to prevent its execution based on its ID and event timing. |
+| `DelayCustomEventSeconds`                | `id` (int), `delaySeconds` (float), `eventTiming` (EventTiming = EventTiming.Update) | `void` | Delays an event based on its ID and event timing by a specified number of seconds. |
+| `AdvancedSendCustomEventDelayedFrames`    | `behaviour` (UdonSharpBehaviour), `eventName` (string), `delayFrames` (int), `eventTiming` (EventTiming = EventTiming.Update) | `int` (Event ID) | Executes an event with a delay in frames and returns the ID of the event created for later access. |
+| `RemoveCustomEventDelayedFrames`         | `id` (int), `eventTiming` (EventTiming = EventTiming.Update) | `void` | Removes an event to prevent its execution based on its ID and event timing. |
+| `DelayCustomEventFrames`                | `id` (int), `delayFrames` (int), `eventTiming` (EventTiming = EventTiming.Update) | `void` | Delays an event based on its ID and event timing by a specified number of frames. |
+| `AdvancedSendCustomEventDelayedSeconds` (protected) | `eventName` (string), `delaySeconds` (float), `eventTiming` (EventTiming = EventTiming.Update) | `int` (Event ID) | Executes an event with a delay in seconds, using the current object as the UdonBehaviour, and returns the ID of the event created for later access. |
+| `AdvancedSendCustomEventDelayedFrames` (protected) | `eventName` (string), `delayFrames` (int), `eventTiming` (EventTiming = EventTiming.Update) | `int` (Event ID) | Executes an event with a delay in frames, using the current object as the UdonBehaviour, and returns the ID of the event created for later access. |
+
+
