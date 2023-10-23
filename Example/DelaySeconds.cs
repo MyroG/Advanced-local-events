@@ -16,9 +16,20 @@ public class DelaySeconds : UdonSharpBehaviour
 
 	public override void Interact()
 	{
+		//We will execute the same event twice, for no particular reason
 		_nbSend++;
 		TxtField.text += $"Event send at time {Time.time}, send {_nbSend} times \n";
 		AdvancedEventHandlerInstance.AdvancedSendCustomEventDelayedSeconds(this, nameof(Result), DelayInSeconds);
+
+		_nbSend++;
+		TxtField.text += $"Event send at time {Time.time}, send {_nbSend} times \n";
+		AdvancedEventHandlerInstance.AdvancedSendCustomEventDelayedSeconds(this, nameof(Result), DelayInSeconds);
+
+		//and another one that is delayed by 5 more seconds
+		_nbSend++;
+		TxtField.text += $"Event send at time {Time.time}, send {_nbSend} times \n";
+		int id = AdvancedEventHandlerInstance.AdvancedSendCustomEventDelayedSeconds(this, nameof(Result), DelayInSeconds);
+		AdvancedEventHandlerInstance.DelayCustomEventSeconds(id, 5.0f);
 	}
 
 	public void Result()

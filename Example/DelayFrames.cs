@@ -17,9 +17,20 @@ namespace myro
 
 		public override void Interact()
 		{
+			//We will execute the same event twice, for no particular reason
 			_nbSend++;
 			TxtField.text += $"Event send at frame {_frames}, send {_nbSend} times \n";
 			AdvancedEventHandlerInstance.AdvancedSendCustomEventDelayedFrames(this, nameof(Result), FramesToDelay);
+
+			_nbSend++;
+			TxtField.text += $"Event send at frame {_frames}, send {_nbSend} times \n";
+			AdvancedEventHandlerInstance.AdvancedSendCustomEventDelayedFrames(this, nameof(Result), FramesToDelay);
+
+			//and another one that is delayed by 5 more frames
+			_nbSend++;
+			TxtField.text += $"Event send at frame {_frames}, send {_nbSend} times \n";
+			int id = AdvancedEventHandlerInstance.AdvancedSendCustomEventDelayedFrames(this, nameof(Result), FramesToDelay);
+			AdvancedEventHandlerInstance.DelayCustomEventFrames(id, 5);
 		}
 
 		public void Result()
