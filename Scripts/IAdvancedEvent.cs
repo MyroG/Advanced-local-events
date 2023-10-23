@@ -1,4 +1,5 @@
-﻿
+﻿//#define DEBUG_ADVANDED_EVENTS
+
 using UdonSharp;
 using UnityEngine;
 using VRC.SDK3.Data;
@@ -16,9 +17,8 @@ namespace myro
 		private int _lastID;
 		protected float _elapsedTime;
 
-		public int AdvancedSendCustomEventDelayed(UdonSharpBehaviour behaviour, string eventName, float delay)
+		public int AdvancedSendCustomEventDelayed(UdonSharpBehaviour behaviour, string eventName, float delay, bool isFrame)
 		{
-			enabled = true;
 			if (_events == null)
 			{
 				_events = new DataDictionary();
@@ -45,8 +45,20 @@ namespace myro
 			_sortedTime.Sort();
 
 #if DEBUG_ADVANDED_EVENTS
-			Debug.Log($"Preparing to send {eventName} in {delaySeconds}s ({timeMS}), number of events {_events.Count}");
+			Debug.Log($"Preparing to send {eventName} with delay {delay} (current delay : {time}), number of events {_events.Count}");
 #endif
+			if (!enabled)
+			{
+				//for improved accuracy when the gameObject just got enabled
+				enabled = true;
+				if (isFrame)
+				{
+					_elapsedTime++;
+				}
+				
+				Loop();
+			}
+
 			return _lastID;
 		}
 
@@ -90,10 +102,11 @@ namespace myro
 					}
 					RemoveCustomEvent(packedData[2].Int);
 				}
-				if (_events.Count == 0)
-				{
-					enabled = false;
-				}
+				
+			}
+			if (_events == null || _events.Count == 0)
+			{
+				enabled = false;
 			}
 		}
 	}

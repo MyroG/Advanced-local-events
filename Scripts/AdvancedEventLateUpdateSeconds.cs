@@ -9,11 +9,10 @@ namespace myro
 	[UdonBehaviourSyncMode(BehaviourSyncMode.None)]
 	public class AdvancedEventLateUpdateSeconds : IAdvancedEvent
 	{
-		private void LateUpdate()
+		void LateUpdate()
 		{
-			Loop();
-
 			_elapsedTime += Time.deltaTime;
+			Loop();
 		}
 	}
 }

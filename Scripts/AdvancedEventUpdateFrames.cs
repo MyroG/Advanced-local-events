@@ -11,9 +11,8 @@ namespace myro
 	{
 		private void Update()
 		{
-			Loop();
-
 			_elapsedTime++;
+			Loop();
 		}
 	}
 }
