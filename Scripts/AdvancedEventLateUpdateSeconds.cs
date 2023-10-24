@@ -11,8 +11,12 @@ namespace myro
 	{
 		void LateUpdate()
 		{
-			_elapsedTime += Time.deltaTime;
 			Loop();
+		}
+
+		protected override void IncrementTimer()
+		{
+			_elapsedTime += Time.deltaTime;
 		}
 	}
 }

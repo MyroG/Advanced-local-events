@@ -11,8 +11,12 @@ namespace myro
 	{
 		private void Update()
 		{
-			_elapsedTime++;
 			Loop();
+		}
+
+		protected override void IncrementTimer()
+		{
+			_elapsedTime++;
 		}
 	}
 }

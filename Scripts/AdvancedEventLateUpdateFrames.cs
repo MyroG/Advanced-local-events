@@ -11,8 +11,12 @@ namespace myro
 	{
 		void LateUpdate()
 		{
-			_elapsedTime++;
 			Loop();
+		}
+
+		protected override void IncrementTimer()
+		{
+			_elapsedTime++;
 		}
 	}
 }

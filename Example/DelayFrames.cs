@@ -31,12 +31,21 @@ namespace myro
 			TxtField.text += $"Event send at frame {_frames}, send {_nbSend} times \n";
 			int id = AdvancedEventHandlerInstance.AdvancedSendCustomEventDelayedFrames(this, nameof(Result), FramesToDelay);
 			AdvancedEventHandlerInstance.DelayCustomEventFrames(id, 5);
+
+			//Just for comparison, a VRC event
+			TxtField.text += $"VRC Event send at frame {_frames}\n";
+			SendCustomEventDelayedFrames(nameof(ResultVRCEvent), FramesToDelay);
 		}
 
 		public void Result()
 		{
 			_nbReceived++;
 			TxtField.text += $"Event received at frame {_frames}, received {_nbReceived} times \n";
+		}
+
+		public void ResultVRCEvent()
+		{
+			TxtField.text += $"VRC Event received at frame {_frames}\n";
 		}
 
 		private void Update()

@@ -30,11 +30,20 @@ public class DelaySeconds : UdonSharpBehaviour
 		TxtField.text += $"Event send at time {Time.time}, send {_nbSend} times \n";
 		int id = AdvancedEventHandlerInstance.AdvancedSendCustomEventDelayedSeconds(this, nameof(Result), DelayInSeconds);
 		AdvancedEventHandlerInstance.DelayCustomEventSeconds(id, 5.0f);
+
+		//Just for comparison, a VRC event
+		TxtField.text += $"VRC Event send at time {Time.time}\n";
+		SendCustomEventDelayedSeconds(nameof(ResultVRCEvent), DelayInSeconds);
 	}
 
 	public void Result()
 	{
 		_nbReceived++;
-		TxtField.text += $"Rec. @ {Time.time}, received {_nbReceived} times, FT {Time.deltaTime} \n";
+		TxtField.text += $"Received @{Time.time}, received {_nbReceived} times, FT {Time.deltaTime} \n";
+	}
+
+	public void ResultVRCEvent()
+	{
+		TxtField.text += $"VRC Received @{Time.time}, FT {Time.deltaTime} \n";
 	}
 }

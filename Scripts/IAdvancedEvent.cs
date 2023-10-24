@@ -17,7 +17,7 @@ namespace myro
 		private int _lastID;
 		protected double _elapsedTime;
 
-		public int AdvancedSendCustomEventDelayed(UdonSharpBehaviour behaviour, string eventName, double delay, bool isFrame)
+		public int AdvancedSendCustomEventDelayed(UdonSharpBehaviour behaviour, string eventName, double delay)
 		{
 			if (_events == null)
 			{
@@ -49,12 +49,7 @@ namespace myro
 #if DEBUG_ADVANDED_EVENTS
 			Debug.Log($"Preparing to send {eventName} with delay {delay} (current delay : {time}), number of events {_events.Count}, ID is {_lastID}");
 #endif
-			if (!enabled)
-			{
-				//for improved accuracy when the gameObject just got enabled
-				enabled = true;				
-				Loop();
-			}
+			enabled = true;
 
 			return _lastID;
 		}
@@ -111,6 +106,7 @@ namespace myro
 
 		protected void Loop()
 		{
+			IncrementTimer();
 			if (_events != null && _eventsCount != 0)
 			{
 				while (_eventsCount != 0)
@@ -136,6 +132,11 @@ namespace myro
 			{
 				enabled = false;
 			}
+		}
+
+		protected virtual void IncrementTimer()
+		{
+
 		}
 	}
 }

@@ -1003,6 +1003,11 @@ PrefabInstance:
       propertyPath: AdvancedEventHandlerInstance
       value: 
       objectReference: {fileID: 1365616617}
+    - target: {fileID: 3668557198179039199, guid: c2b420ff6f1a31a4096866433213f6f4,
+        type: 3}
+      propertyPath: _syncMethod
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3668557199275125250, guid: c2b420ff6f1a31a4096866433213f6f4,
         type: 3}
       propertyPath: m_RootOrder

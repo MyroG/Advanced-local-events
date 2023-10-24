@@ -61,9 +61,9 @@ namespace myro
 			CheckReferences();
 
 			if (eventTiming == EventTiming.Update)
-				return _advancedEventUpdateSeconds.AdvancedSendCustomEventDelayed(behaviour, eventName, delaySeconds, false);
+				return _advancedEventUpdateSeconds.AdvancedSendCustomEventDelayed(behaviour, eventName, delaySeconds);
 			else
-				return _advancedEventLateUpdateSeconds.AdvancedSendCustomEventDelayed(behaviour, eventName, delaySeconds, false);
+				return _advancedEventLateUpdateSeconds.AdvancedSendCustomEventDelayed(behaviour, eventName, delaySeconds);
 		}
 
 		/// <summary>
@@ -112,9 +112,9 @@ namespace myro
 			CheckReferences();
 
 			if (eventTiming == EventTiming.Update)
-				return _advancedEventUpdateFrames.AdvancedSendCustomEventDelayed(behaviour, eventName, delayFrames, true);
+				return _advancedEventUpdateFrames.AdvancedSendCustomEventDelayed(behaviour, eventName, delayFrames);
 			else
-				return _advancedEventLateUpdateFrames.AdvancedSendCustomEventDelayed(behaviour, eventName, delayFrames, true);
+				return _advancedEventLateUpdateFrames.AdvancedSendCustomEventDelayed(behaviour, eventName, delayFrames);
 		}
 
 		/// <summary>
