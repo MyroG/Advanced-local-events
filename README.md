@@ -1,6 +1,6 @@
 # Advanced Local events, a VRChat script to delay local events
 
-In Udon, it is not recommended to use any `Update` events, like `Update` (locked to your FPS), `FixedUpdate` (locked to your screen's refresh rate, in Hz), `LateUpdate` etc. Because executing stuff every frame can be very costly.
+In Udon, it is not recommended to implement `Update` methods, like `Update` (locked to your FPS), `FixedUpdate` (locked to your screen's refresh rate, in Hz), `LateUpdate` etc. Because executing stuff every frame can be very costly.
 If you need to execute things regularly, but not every frame, you should rather use events like `SendCustomEventDelayedSeconds` or `SendCustomEventDelayedFrames`, for instance the example below shows how to create a custom Update loop that only gets executed every 5 seconds :
 
 ```
