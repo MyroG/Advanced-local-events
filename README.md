@@ -1,13 +1,21 @@
-# Advanced Local events, a VRChat prefab to delay local events
+# Advanced Local events, a VRChat script to delay local events
 
-In Udon, it is recommended to not use any `Update` loops, like `Update` (locked to your FPS), `FixedUpdate` (locked to your screen's refresh rate, in Hz), `LateUpdate` etc. Because executing stuff every frame can be very costly.
-If you need to execute things regularly, you should rather use events like `SendCustomEventDelayedSeconds` or `SendCustomEventDelayedFrames`
+In Udon, it is recommended to not use any `Update` events, like `Update` (locked to your FPS), `FixedUpdate` (locked to your screen's refresh rate, in Hz), `LateUpdate` etc. Because executing stuff every frame can be very costly.
+If you need to execute things regularly, but not every frame, you should rather use events like `SendCustomEventDelayedSeconds` or `SendCustomEventDelayedFrames`, for instance the example below shows how to create a custom Update loop that only gets executed every 5 seconds :
 
 ```
+void Start()
+{
+   YourCustomLoop();
+}
+
 public void YourCustomLoop()
 {
-   //your code here
-   SendCustomEventDelayedSeconds(nameof(YourCustomLoop), 5.0f); //executes YourCustomLoop every 5 seconds
+   if (enabled) //To ensure that the loops break if the script gets disabled
+   {
+      //your code here
+      SendCustomEventDelayedSeconds(nameof(YourCustomLoop), 5.0f); //executes YourCustomLoop every 5 seconds
+   }
 }
 ```
 
@@ -15,19 +23,15 @@ The events `SendCustomEventDelayedSeconds` and `SendCustomEventDelayedFrames` ha
 That's why I decided to create this prefab, this prefab fixes a few issues `SendCustomEventDelayedSeconds` and `SendCustomEventDelayedFrames` have while creating a few other issues :
 
 - Fixes : Events can be delayed, paused or removed
-- Issues : More Update loops
+- Issues : My script uses an Update loop, which makes it a bit less performant than the original VRC version, it is also less accurate due to a few optimisations I implemented (The script disables itself once the event stack is empty, which can cause newly sent events to be slightly delayed by a few frames)
 
-You can use this prefab if :
-- You have hundreds of GameObjects that sends events with `SendCustomEventDelayedSeconds` and `SendCustomEventDelayedFrames`
-- You need to pause events from time to time, or delete events.
-
-Do not use this prefab if:
+To summarize, do not use this prefab if:
 - You don't need to delay events
-- You cannot find a workaround without writing your own custom event sender.
+- You cannot find a workaround to delay events without writing your own custom event sender.
 
-Basically, this prefab implements new methods `AdvancedSendCustomEventDelayedSeconds` and  `AdvancedSendCustomEventDelayedFrames`, which returns an ID, that ID can later be used to break the event, or pause it.
-During my tests, I was able to queue 200 events without noticing a huige performance impact, so the preformance inpact is not too bad, but it really depends on how you want to use it. 
-The script automatically disables itself if no event is getting send, which also disables the Update events.
+Basically, this prefab implements new methods `AdvancedSendCustomEventDelayedSeconds` and  `AdvancedSendCustomEventDelayedFrames`, which returns an ID, that ID can later be used to break the event, or delay it.
+During my tests, I was able to queue 200 events without noticing a huge performance impact, so the preformance inpact is not too bad, but it really depends on how you want to use it. 
+The script automatically disables itself if the event stack is clear, which also disables the Update events.
 
 ## Installation
 
@@ -53,7 +57,7 @@ public AdvancedEventHandler AdvancedEventHandlerInstance; //you can name it howe
 
 ## Documentation
 
-If events need to be delayed, just disable the `AdvancedEventHandler` script, either by disabling the GameObject or disabling the `AdvancedEventHandler` component.
+If events need to be paused, just disable the `AdvancedEventHandler` script, either by disabling the GameObject or disabling the `AdvancedEventHandler` component.
 
 | Function Name                              | Parameters                                                                      | Return Type and Explanation                                | Description/Summary                                           |
 |-------------------------------------------|---------------------------------------------------------------------------------|--------------------------------------------------------------|---------------------------------------------------------------|
