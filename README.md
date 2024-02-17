@@ -1,24 +1,5 @@
 # Advanced Local events, a VRChat script to delay local events
 
-In Udon, it is not recommended to implement `Update` methods, like `Update` (locked to your FPS), `FixedUpdate` (locked to your screen's refresh rate, in Hz), `LateUpdate` etc. Because executing stuff every frame can be very costly.
-If you need to execute things regularly, but not every frame, you should rather use events like `SendCustomEventDelayedSeconds` or `SendCustomEventDelayedFrames`, for instance the example below shows how to create a custom Update loop that only gets executed every 5 seconds :
-
-```
-void Start()
-{
-   YourCustomLoop();
-}
-
-public void YourCustomLoop()
-{
-   if (enabled) //To ensure that the loops break if the script gets disabled
-   {
-      //your code here
-      SendCustomEventDelayedSeconds(nameof(YourCustomLoop), 5.0f); //executes YourCustomLoop every 5 seconds
-   }
-}
-```
-
 The events `SendCustomEventDelayedSeconds` and `SendCustomEventDelayedFrames` have unfortunately a few issues, once an event is started it cannot be stopped or delayed, in my particular case that was really annoying.
 That's why I decided to create this prefab, this prefab fixes a few issues `SendCustomEventDelayedSeconds` and `SendCustomEventDelayedFrames` have while creating a few other issues :
 
